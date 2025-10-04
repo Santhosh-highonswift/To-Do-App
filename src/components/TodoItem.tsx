@@ -71,7 +71,7 @@ export default function TodoItem({ todo }: TodoItemProps) {
       <button
         onClick={handleDelete}
         disabled={isDeleting}
-        className="text-red-500 hover:text-red-700 disabled:opacity-50 px-3 py-1 rounded"
+        className="text-red-500 hover:text-red-700 disabled:opacity-50 px-3 py-1 rounded cursor-pointer"
       >
         {isDeleting ? 'Deleting...' : 'Delete'}
       </button>

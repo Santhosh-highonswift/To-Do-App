@@ -15,12 +15,12 @@ export default function SignupPage() {
 
   useEffect(() => {
     setIsMounted(true)
-    
+
     // Trigger ball dropdown animation after component mounts
     const timer = setTimeout(() => {
       setShowBallDropdown(true)
     }, 1000)
-    
+
     return () => clearTimeout(timer)
   }, [])
 
@@ -37,8 +37,9 @@ export default function SignupPage() {
 
       if (error) throw error
       router.push('/auth/login?message=Check your email for verification')
-    } catch (error: any) {
-      setError(error.message)
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'An error occurred during signup')
+
     } finally {
       setLoading(false)
     }
@@ -53,15 +54,13 @@ export default function SignupPage() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-4000"></div>
       </div>
 
-      <div className={`relative bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-2xl w-96 border border-white/50 transform transition-all duration-700 ${
-        isMounted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-      }`}>
-        
+      <div className={`relative bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-2xl w-96 border border-white/50 transform transition-all duration-700 ${isMounted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+        }`}>
+
         {/* Enhanced Decorative Elements */}
-        <div className={`absolute -top-3 -right-3 w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full transition-all duration-1000 ${
-          showBallDropdown ? 'animate-ball-dropdown' : 'animate-bounce'
-        }`}></div>
-        
+        <div className={`absolute -top-3 -right-3 w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full transition-all duration-1000 ${showBallDropdown ? 'animate-ball-dropdown' : 'animate-bounce'
+          }`}></div>
+
         {/* Ball Dropdown Trail */}
         {showBallDropdown && (
           <>
@@ -69,16 +68,16 @@ export default function SignupPage() {
             <div className="absolute -top-12 -right-2.5 w-1 h-2 bg-blue-300/30 animate-trail-extend animation-delay-100"></div>
           </>
         )}
-        
+
         <div className="absolute -bottom-3 -left-3 w-4 h-4 bg-purple-500 rounded-full animate-bounce animation-delay-1000"></div>
-        
+
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Join Us
           </h1>
           <p className="text-gray-500 mt-2">Create your account to get started</p>
         </div>
-        
+
         <form onSubmit={handleSignup} className="space-y-6">
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700 transition-all duration-300 transform hover:translate-x-1">
@@ -128,9 +127,8 @@ export default function SignupPage() {
                   {[1, 2, 3].map((dot) => (
                     <div
                       key={dot}
-                      className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                        password.length >= dot * 2 ? 'bg-green-500' : 'bg-gray-300'
-                      }`}
+                      className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${password.length >= dot * 2 ? 'bg-green-500' : 'bg-gray-300'
+                        }`}
                     ></div>
                   ))}
                 </div>
@@ -175,8 +173,8 @@ export default function SignupPage() {
         <div className="mt-8 pt-6 border-t border-gray-200">
           <p className="text-center text-gray-600">
             Already have an account?{' '}
-            <a 
-              href="/auth/login" 
+            <a
+              href="/auth/login"
               className="text-blue-500 hover:text-blue-600 font-semibold transition-colors duration-300 hover:underline"
             >
               Sign In

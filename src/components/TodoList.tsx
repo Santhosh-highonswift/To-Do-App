@@ -69,4 +69,3 @@ export default function TodoList({ initialTodos }: TodoListProps) {
     </div>
   )
 }
-

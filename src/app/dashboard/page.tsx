@@ -1,36 +1,51 @@
-import { supabase } from '@/lib/supabase'
-import { redirect } from 'next/navigation'
-import AddTodo from '@/components/AddTodo'
-import TodoList from '@/components/TodoList'
+
+import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/supabaseServer';
+import AddTodo from '@/components/AddTodo';
+import TodoList from '@/components/TodoList';
 
 export default async function DashboardPage() {
-  const { data: { session } } = await supabase.auth.getSession()
+  console.log('>>> DashboardPage running');
+  const supabase = await createClient();
+
+  const { data: { session }, error } = await supabase.auth.getSession();
+  if (error) {
+    console.error('DashboardPage getSession error:', error);
+  }
+  console.log('DashboardPage - Session:', session ? `User logged in (${session.user.email})` : 'No user session');
 
   if (!session) {
-    redirect('/auth/login')
+    console.log('DashboardPage - No session found, redirecting to login.');
+    redirect('/auth/login');
   }
 
-  const { data: todos, error } = await supabase
+  const { data: todos, error: todosError } = await supabase
     .from('todos')
     .select('*')
     .eq('user_id', session.user.id)
-    .order('created_at', { ascending: false })
+    .order('created_at', { ascending: false });
 
-  if (error) {
-    console.error('Error fetching todos:', error)
+  if (todosError) {
+    console.error('Error fetching todos:', todosError);
   }
 
   const handleSignOut = async () => {
-    'use server'
-    await supabase.auth.signOut()
-    redirect('/auth/login')
-  }
+    'use server';
+    const supabaseAction = await createClient();
+    await supabaseAction.auth.signOut();
+    redirect('/auth/login');
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-2xl mx-auto py-8 px-4">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">My Todo List</h1>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">My Todo List</h1>
+            {session.user.email && (
+              <p className="text-gray-600 mt-1">Welcome, {session.user.email}</p>
+            )}
+          </div>
           <form action={handleSignOut}>
             <button
               type="submit"
@@ -45,5 +60,5 @@ export default async function DashboardPage() {
         <TodoList initialTodos={todos || []} />
       </div>
     </div>
-  )
+  );
 }

@@ -33,7 +33,7 @@ export default function SignupPage() {
 
   return (
     <div className="bg-white p-8 rounded-lg shadow-md w-96">
-      <h1 className="text-2xl font-bold mb-6 text-center">Sign Up</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center text-gray-700">Sign Up</h1>
       
       <form onSubmit={handleSignup} className="space-y-4">
         <div>
@@ -42,7 +42,7 @@ export default function SignupPage() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-gray-700"
             required
           />
         </div>
@@ -53,7 +53,7 @@ export default function SignupPage() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-gray-700"
             required
             minLength={6}
           />

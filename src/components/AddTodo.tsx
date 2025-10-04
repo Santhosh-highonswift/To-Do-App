@@ -2,10 +2,12 @@
 
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 
 export default function AddTodo() {
   const [task, setTask] = useState('')
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
   const handleAddTodo = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -16,7 +18,10 @@ export default function AddTodo() {
     try {
       const { data: { user } } = await supabase.auth.getUser()
       
-      if (!user) throw new Error('No user found')
+      if (!user) {
+        router.push('/auth/login')
+        return
+      }
 
       const { error } = await supabase
         .from('todos')
@@ -28,7 +33,7 @@ export default function AddTodo() {
       if (error) throw error
       
       setTask('')
-      window.location.reload()
+      router.refresh() 
     } catch (error) {
       console.error('Error adding todo:', error)
     } finally {
@@ -50,7 +55,7 @@ export default function AddTodo() {
         <button
           type="submit"
           disabled={loading || !task.trim()}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:opacity-50"
+          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:opacity-50 cursor-pointer"
         >
           {loading ? 'Adding...' : 'Add'}
         </button>

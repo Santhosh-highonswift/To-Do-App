@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 
 interface Todo {
   id: string
@@ -17,6 +18,7 @@ interface TodoItemProps {
 export default function TodoItem({ todo }: TodoItemProps) {
   const [isCompleted, setIsCompleted] = useState(todo.is_completed)
   const [isDeleting, setIsDeleting] = useState(false)
+  const router = useRouter()
 
   const handleToggleComplete = async () => {
     try {
@@ -29,9 +31,10 @@ export default function TodoItem({ todo }: TodoItemProps) {
         .eq('id', todo.id)
 
       if (error) throw error
+      router.refresh() 
     } catch (error) {
       console.error('Error updating todo:', error)
-      setIsCompleted(!isCompleted)
+      setIsCompleted(!isCompleted) 
     }
   }
 
@@ -44,10 +47,10 @@ export default function TodoItem({ todo }: TodoItemProps) {
         .eq('id', todo.id)
 
       if (error) throw error
-      window.location.reload()
+      router.refresh() 
     } catch (error) {
       console.error('Error deleting todo:', error)
-      setIsDeleting(false)
+      setIsDeleting(false) 
     }
   }
 
@@ -68,7 +71,7 @@ export default function TodoItem({ todo }: TodoItemProps) {
       <button
         onClick={handleDelete}
         disabled={isDeleting}
-        className="text-red-500 hover:text-red-700 disabled:opacity-50"
+        className="text-red-500 hover:text-red-700 disabled:opacity-50 px-3 py-1 rounded cursor-pointer"
       >
         {isDeleting ? 'Deleting...' : 'Delete'}
       </button>

@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
@@ -18,7 +17,7 @@ export default function LoginPage() {
     const timer = setTimeout(() => {
       setShowBallDropdown(true);
     }, 800);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -39,9 +38,9 @@ export default function LoginPage() {
         console.log('Login successful, redirecting to dashboard.');
         router.push('/dashboard');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Login catch error:', error);
-      setError(error.message || 'An error occurred during login');
+      setError(error instanceof Error ? error.message : 'An error occurred during login');
     } finally {
       setLoading(false);
     }
@@ -52,8 +51,8 @@ export default function LoginPage() {
       <motion.div
         initial={{ opacity: 0, y: -50, scale: 0.9 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ 
-          duration: 0.8, 
+        transition={{
+          duration: 0.8,
           ease: [0.23, 1, 0.32, 1]
         }}
         className="bg-white p-10 rounded-3xl w-96 border border-gray-100 shadow-lg"
@@ -61,19 +60,19 @@ export default function LoginPage() {
         {/* Enhanced Decorative Ball with Dropdown Animation */}
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
-          animate={{ 
-            scale: 1, 
+          animate={{
+            scale: 1,
             opacity: 1,
             y: showBallDropdown ? 40 : 0,
             opacity: showBallDropdown ? 0 : 1
           }}
-          transition={{ 
+          transition={{
             duration: 1.2,
             ease: "easeOut"
           }}
           className="absolute -top-3 -right-3 w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-lg"
         />
-        
+
         {/* Ball Dropdown Trail */}
         <AnimatePresence>
           {showBallDropdown && (
@@ -143,7 +142,7 @@ export default function LoginPage() {
             <label className="block text-sm font-semibold text-gray-700">Email</label>
             <div className="relative">
               <motion.input
-                whileFocus={{ 
+                whileFocus={{
                   boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.1)",
                   borderColor: "#3b82f6"
                 }}
@@ -155,12 +154,12 @@ export default function LoginPage() {
                 required
               />
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                <motion.svg 
+                <motion.svg
                   className="w-5 h-5 text-gray-400"
-                  fill="none" 
-                  stroke="currentColor" 
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
-                  animate={{ 
+                  animate={{
                     color: email ? '#10b981' : '#9ca3af'
                   }}
                   transition={{ duration: 0.3 }}
@@ -171,7 +170,7 @@ export default function LoginPage() {
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                 <motion.div
                   initial={{ scale: 0, opacity: 0 }}
-                  animate={{ 
+                  animate={{
                     scale: email ? 1 : 0,
                     opacity: email ? 1 : 0
                   }}
@@ -191,7 +190,7 @@ export default function LoginPage() {
             <label className="block text-sm font-semibold text-gray-700">Password</label>
             <div className="relative">
               <motion.input
-                whileFocus={{ 
+                whileFocus={{
                   boxShadow: "0 0 0 3px rgba(139, 92, 246, 0.1)",
                   borderColor: "#8b5cf6"
                 }}
@@ -203,12 +202,12 @@ export default function LoginPage() {
                 required
               />
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                <motion.svg 
+                <motion.svg
                   className="w-5 h-5 text-gray-400"
-                  fill="none" 
-                  stroke="currentColor" 
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
-                  animate={{ 
+                  animate={{
                     color: password ? '#10b981' : '#9ca3af'
                   }}
                   transition={{ duration: 0.3 }}
@@ -222,7 +221,7 @@ export default function LoginPage() {
                     <motion.div
                       key={dot}
                       initial={{ scale: 0 }}
-                      animate={{ 
+                      animate={{
                         scale: password.length >= dot * 2 ? 1 : 0.5,
                         backgroundColor: password.length >= dot * 2 ? '#10b981' : '#d1d5db'
                       }}
@@ -233,7 +232,7 @@ export default function LoginPage() {
                 </div>
               </div>
             </div>
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: password.length > 0 ? 1 : 0 }}
               className="text-xs text-gray-500 mt-1 text-right"
@@ -260,7 +259,7 @@ export default function LoginPage() {
           </AnimatePresence>
 
           <motion.button
-            whileHover={{ 
+            whileHover={{
               scale: 1.03,
               backgroundColor: "#4f46e5",
               boxShadow: "0 10px 30px -10px rgba(99, 102, 241, 0.5)"
@@ -288,7 +287,7 @@ export default function LoginPage() {
           <motion.p
             className="text-sm text-gray-600"
           >
-            Don't have an account?{' '}
+           Don&apos;t have an account?{' '}
             <motion.a
               whileHover={{ color: "#7c3aed" }}
               href="/auth/signup"

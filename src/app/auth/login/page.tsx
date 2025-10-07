@@ -62,7 +62,6 @@ export default function LoginPage() {
           initial={{ scale: 0, opacity: 0 }}
           animate={{
             scale: 1,
-            opacity: 1,
             y: showBallDropdown ? 40 : 0,
             opacity: showBallDropdown ? 0 : 1
           }}

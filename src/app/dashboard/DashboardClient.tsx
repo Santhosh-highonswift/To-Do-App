@@ -5,10 +5,14 @@ import AddTodo from '@/components/AddTodo';
 import TodoList from '@/components/TodoList';
 
 interface Todo {
-  id: string;
-  task: string;
-  is_completed: boolean;
-  created_at: string;
+  id: string
+  task: string
+  description: string | null
+  status: 'pending' | 'in-progress' | 'completed'
+  priority: 'low' | 'medium' | 'high'
+  due_date: string | null
+  is_completed: boolean
+  created_at: string
 }
 
 interface DashboardClientProps {

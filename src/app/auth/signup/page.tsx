@@ -9,6 +9,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   const [showBallDropdown, setShowBallDropdown] = useState(false)
   const router = useRouter()
@@ -16,7 +17,6 @@ export default function SignupPage() {
   useEffect(() => {
     setIsMounted(true)
 
-    // Trigger ball dropdown animation after component mounts
     const timer = setTimeout(() => {
       setShowBallDropdown(true)
     }, 1000)
@@ -39,22 +39,18 @@ export default function SignupPage() {
       router.push('/auth/login?message=Check your email for verification')
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'An error occurred during signup')
-
     } finally {
       setLoading(false)
     }
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-32 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-32 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-4000"></div>
-      </div>
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
+  }
 
-      <div className={`relative bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-2xl w-96 border border-white/50 transform transition-all duration-700 ${isMounted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-white p-4">
+      <div className={`relative bg-white p-8 rounded-2xl shadow-lg w-96 border border-gray-100 transform transition-all duration-700 ${isMounted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>
 
         {/* Enhanced Decorative Elements */}
@@ -80,7 +76,7 @@ export default function SignupPage() {
 
         <form onSubmit={handleSignup} className="space-y-6">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 transition-all duration-300 transform hover:translate-x-1">
+            <label className="block text-sm font-medium text-gray-700">
               Email Address
             </label>
             <div className="relative">
@@ -88,12 +84,12 @@ export default function SignupPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-xl border border-gray-200 px-4 py-3 pl-11 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700 bg-white/50 backdrop-blur-sm"
+                className="w-full rounded-xl border border-gray-200 px-4 py-3 pl-11 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700 bg-white"
                 placeholder="Enter your email"
                 required
               />
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                <svg className="w-5 h-5 text-gray-400 transition-colors duration-300 group-focus-within:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                 </svg>
               </div>
@@ -104,35 +100,40 @@ export default function SignupPage() {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 transition-all duration-300 transform hover:translate-x-1">
+            <label className="block text-sm font-medium text-gray-700">
               Password
             </label>
             <div className="relative">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl border border-gray-200 px-4 py-3 pl-11 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700 bg-white/50 backdrop-blur-sm"
+                className="w-full rounded-xl border border-gray-200 px-4 py-3 pl-11 pr-11 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700 bg-white"
                 placeholder="Create a password"
                 required
                 minLength={6}
               />
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                <svg className="w-5 h-5 text-gray-400 transition-colors duration-300 group-focus-within:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                <div className="flex items-center space-x-1">
-                  {[1, 2, 3].map((dot) => (
-                    <div
-                      key={dot}
-                      className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${password.length >= dot * 2 ? 'bg-green-500' : 'bg-gray-300'
-                        }`}
-                    ></div>
-                  ))}
-                </div>
-              </div>
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
+              >
+                {showPassword ? (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                )}
+              </button>
             </div>
             <p className="text-xs text-gray-500 mt-1">
               {password.length > 0 && (
@@ -161,7 +162,7 @@ export default function SignupPage() {
           >
             {loading ? (
               <div className="flex items-center justify-center">
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2  "></div>
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
                 Creating Account...
               </div>
             ) : (
@@ -229,14 +230,6 @@ export default function SignupPage() {
         
         .animate-trail-extend {
           animation: trail-extend 1s ease-out forwards;
-        }
-        
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        
-        .animation-delay-4000 {
-          animation-delay: 4s;
         }
       `}</style>
     </div>

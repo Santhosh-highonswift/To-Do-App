@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 
 export default function AddTodo() {
@@ -10,6 +9,7 @@ export default function AddTodo() {
   const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('medium')
   const [dueDate, setDueDate] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const router = useRouter()
 
   const handleAddTodo = async (e: React.FormEvent) => {
@@ -17,32 +17,33 @@ export default function AddTodo() {
     if (!task.trim()) return
 
     setLoading(true)
+    setError('')
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      
-      if (!user) {
-        router.push('/auth/login')
-        return
-      }
-
-      const { error } = await supabase
-        .from('todos')
-        .insert([{ 
-          task: task.trim(), 
+      const response = await fetch('/api/todos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          task: task.trim(),
           description: description.trim(),
           priority,
-          due_date: dueDate ? new Date(dueDate).toISOString() : null,
-          user_id: user.id 
-        }])
+          due_date: dueDate || null,
+        }),
+      })
 
-      if (error) throw error
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to add todo')
+      }
       
       setTask('')
       setDescription('')
       setPriority('medium')
       setDueDate('')
-      router.refresh() 
+      router.refresh()
     } catch (error) {
       console.error('Error adding todo:', error)
     } finally {
@@ -50,8 +51,14 @@ export default function AddTodo() {
     }
   }
 
+
   return (
     <form onSubmit={handleAddTodo} className="space-y-4">
+       {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          {error}
+        </div>
+      )}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Task Title *

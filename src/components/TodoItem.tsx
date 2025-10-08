@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 
 interface Todo {
@@ -37,17 +36,24 @@ export default function TodoItem({ todo }: TodoItemProps) {
       setIsCompleted(newCompletedState)
       setStatus(newStatus)
 
-      const { error } = await supabase
-        .from('todos')
-        .update({ 
+      const response = await fetch(`/api/todos/${todo.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           is_completed: newCompletedState,
           status: newStatus,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', todo.id)
+        }),
+      })
 
-      if (error) throw error
-      router.refresh() 
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to update todo')
+      }
+      
+      router.refresh()
     } catch (error) {
       console.error('Error updating todo:', error)
       setIsCompleted(!isCompleted)
@@ -60,16 +66,23 @@ export default function TodoItem({ todo }: TodoItemProps) {
       setStatus(newStatus)
       setIsCompleted(newStatus === 'completed')
 
-      const { error } = await supabase
-        .from('todos')
-        .update({ 
+      const response = await fetch(`/api/todos/${todo.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           status: newStatus,
           is_completed: newStatus === 'completed',
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', todo.id)
+        }),
+      })
 
-      if (error) throw error
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to update status')
+      }
+      
       router.refresh()
     } catch (error) {
       console.error('Error updating status:', error)
@@ -89,16 +102,22 @@ export default function TodoItem({ todo }: TodoItemProps) {
 
     setIsUpdating(true)
     try {
-      const { error } = await supabase
-        .from('todos')
-        .update({ 
+      const response = await fetch(`/api/todos/${todo.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           task: editedTask.trim(),
           description: editedDescription.trim(),
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', todo.id)
+        }),
+      })
 
-      if (error) throw error
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to update todo')
+      }
       
       setIsEditing(false)
       router.refresh()
@@ -118,16 +137,20 @@ export default function TodoItem({ todo }: TodoItemProps) {
   const handleDelete = async () => {
     setIsDeleting(true)
     try {
-      const { error } = await supabase
-        .from('todos')
-        .delete()
-        .eq('id', todo.id)
+      const response = await fetch(`/api/todos/${todo.id}`, {
+        method: 'DELETE',
+      })
 
-      if (error) throw error
-      router.refresh() 
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to delete todo')
+      }
+      
+      router.refresh()
     } catch (error) {
       console.error('Error deleting todo:', error)
-      setIsDeleting(false) 
+      setIsDeleting(false)
     }
   }
 
@@ -254,7 +277,7 @@ export default function TodoItem({ todo }: TodoItemProps) {
                 {status.replace('-', ' ')}
               </span>
               
-          Due Date - {todo.due_date && (
+          Due Date -{todo.due_date && (
                 <span className={`flex items-center space-x-1 ${
                   isOverdue ? 'text-red-600 font-semibold' : 'text-gray-500'
                 }`}>
@@ -268,7 +291,7 @@ export default function TodoItem({ todo }: TodoItemProps) {
           </div>
         </div>
         
-        <div className="flex items-center space-x-2 ml-4 ">
+        <div className="flex items-center space-x-2 ml-4">
           <select
             value={status}
             onChange={(e) => handleStatusChange(e.target.value as 'pending' | 'in-progress' | 'completed')}

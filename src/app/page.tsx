@@ -14,18 +14,14 @@ export default async function HomePage() {
   }
   // --- END ADDED LOGS ---
 
-  const {
-    data: { session },
-    error
-  } = await supabase.auth.getSession()
-
+  const { data: { user }, error } = await supabase.auth.getUser()
   // Add error handling
   if (error) {
     console.error('HomePage getSession error:', error);
   }
-  console.log('HomePage - Session:', session ? 'User logged in' : 'No user session');
+  console.log('HomePage - Session:', user ? 'User logged in' : 'No user session');
 
-  if (session) {
+  if (user) {
     redirect('/dashboard')
   } else {
     redirect('/auth/login')

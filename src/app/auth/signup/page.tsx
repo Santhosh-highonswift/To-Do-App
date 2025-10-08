@@ -49,9 +49,8 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white p-4">
-      <div className={`relative bg-white p-8 rounded-2xl shadow-lg w-96 border border-gray-100 transform transition-all duration-700 ${isMounted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-        }`}>
+    <div className="min-h-screen flex items-center justify-center  p-4">
+      <div className={`relative bg-white p-8 rounded-2xl shadow-lg w-96 border border-gray-100 transform transition-all duration-700 ${isMounted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
 
         {/* Enhanced Decorative Elements */}
         <div className={`absolute -top-3 -right-3 w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full transition-all duration-1000 ${showBallDropdown ? 'animate-ball-dropdown' : 'animate-bounce'

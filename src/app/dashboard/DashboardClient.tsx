@@ -23,7 +23,7 @@ interface DashboardClientProps {
 
 export default function DashboardClient({ initialTodos, userEmail, handleSignOut }: DashboardClientProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 ">
       <motion.div
         className="relative z-10"
         initial={{ opacity: 0 }}
@@ -132,7 +132,7 @@ export default function DashboardClient({ initialTodos, userEmail, handleSignOut
             <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
               <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-4">
                 <motion.h2 
-                  className="text-white font-bold text-lg flex items-center space-x-2"
+                  className="text-white font-bold text-lg flex items-center space-x-2 "
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.8 }}
@@ -140,7 +140,7 @@ export default function DashboardClient({ initialTodos, userEmail, handleSignOut
                   <span>Your Tasks</span>
                 </motion.h2>
               </div>
-              <div className="p-1">
+              <div className="p-1 my-5 mx-4">
                 <TodoList initialTodos={initialTodos} />
               </div>
             </div>

@@ -254,7 +254,7 @@ export default function TodoItem({ todo }: TodoItemProps) {
                 {status.replace('-', ' ')}
               </span>
               
-              {todo.due_date && (
+          Due Date - {todo.due_date && (
                 <span className={`flex items-center space-x-1 ${
                   isOverdue ? 'text-red-600 font-semibold' : 'text-gray-500'
                 }`}>
@@ -268,7 +268,7 @@ export default function TodoItem({ todo }: TodoItemProps) {
           </div>
         </div>
         
-        <div className="flex items-center space-x-2 ml-4">
+        <div className="flex items-center space-x-2 ml-4 ">
           <select
             value={status}
             onChange={(e) => handleStatusChange(e.target.value as 'pending' | 'in-progress' | 'completed')}
